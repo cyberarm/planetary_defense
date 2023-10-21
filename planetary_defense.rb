@@ -14,4 +14,10 @@ require_relative "lib/window"
 require_relative "lib/states/main_menu"
 require_relative "lib/states/game"
 
-PlanetaryDefense::Window.new(width: 1280, height: 800, resizable: true).show
+require_relative "lib/game_object"
+require_relative "lib/game_objects/planet"
+require_relative "lib/game_objects/moon"
+require_relative "lib/game_objects/asteroid"
+# require_relative "lib/game_objects/drone"
+
+PlanetaryDefense::Window.new(width: 1280, height: 720, resizable: true).show
