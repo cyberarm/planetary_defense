@@ -6,7 +6,7 @@ module PlanetaryDefense
       end
 
       def draw
-        @image.draw_rot(window.width / 2, window.height / 2, ZOrder::PLANET, @angle, @image_origin, @image_origin, @scale, @scale)
+        @image.draw_rot(PlanetaryDefense::DESIGN_RESOLUTION_WIDTH / 2.0, PlanetaryDefense::DESIGN_RESOLUTION_HEIGHT / 2.0, ZOrder::PLANET, @angle, @image_origin, @image_origin, @scale, @scale)
       end
 
       def update(dt)

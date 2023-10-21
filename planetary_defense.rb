@@ -6,6 +6,9 @@ end
 
 module PlanetaryDefense
   ROOT_PATH = File.expand_path(".", __dir__)
+  DESIGN_RESOLUTION_WIDTH = 1280 # px
+  DESIGN_RESOLUTION_HEIGHT = 720 # px
+  FIXED_UPDATE_INTERVAL = 0.016 # 60 updates/second
 end
 
 require_relative "lib/version"
@@ -15,6 +18,7 @@ require_relative "lib/states/main_menu"
 require_relative "lib/states/game"
 
 require_relative "lib/game_object"
+require_relative "lib/game_objects/star"
 require_relative "lib/game_objects/planet"
 require_relative "lib/game_objects/moon"
 require_relative "lib/game_objects/asteroid"
