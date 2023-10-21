@@ -2,10 +2,11 @@ module PlanetaryDefense
   module GameObjects
     class Asteroid < GameObject
       def setup
+        pp @options
+
         @image = get_image("#{ROOT_PATH}/assets/asteroid_large.png")
 
-        @position.x = window.width / 2
-        @position.y = window.height / 2
+        @rotation_speed = rand(6..24)
       end
 
       def draw
@@ -13,7 +14,10 @@ module PlanetaryDefense
       end
 
       def update(dt)
-        @angle += dt * 6
+        @angle += dt * @rotation_speed
+
+        @position += @velocity
+        pp @position
       end
     end
   end

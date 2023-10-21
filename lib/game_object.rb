@@ -15,11 +15,11 @@ module PlanetaryDefense
     def initialize(options = {})
       @options = options
 
-      @position = CyberarmEngine::Vector.new || @options[:position]
-      @velocity = CyberarmEngine::Vector.new || @options[:velocity]
-      @angle = 0 || @options[:angle]
-      @scale = 0.5 || @options[:scale]
-      @image_origin = 0.5 || @options[:image_origin]
+      @position = @options[:position] || CyberarmEngine::Vector.new
+      @velocity = @options[:velocity] || CyberarmEngine::Vector.new
+      @angle = @options[:angle] || 0
+      @scale = @options[:scale] || 0.5
+      @image_origin = @options[:image_origin] || 0.5
 
       setup
     end

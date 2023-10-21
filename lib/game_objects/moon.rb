@@ -17,7 +17,10 @@ module PlanetaryDefense
       def update(dt)
         @angle += dt * 6
 
-        @position = CyberarmEngine::Vector.new(@origin.x + Gosu.offset_x(@angle, @orbital_distance), @origin.y + Gosu.offset_y(@angle, @orbital_distance))
+        @position = CyberarmEngine::Vector.new(
+          @origin.x + Gosu.offset_x(@angle, @orbital_distance),
+          @origin.y + Gosu.offset_y(@angle, @orbital_distance)
+        )
       end
     end
   end

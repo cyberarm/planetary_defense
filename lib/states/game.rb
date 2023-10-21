@@ -25,10 +25,11 @@ module PlanetaryDefense
         end
 
         @objs = []
-        @objs << GameObjects::Planet.new
-        @objs << GameObjects::Moon.new
+        @objs << @planet = GameObjects::Planet.new
+        @objs << @moon = GameObjects::Moon.new
 
-        @objs << GameObjects::Asteroid.new
+        position, velocity = choose_asteroid_position_and_velocity
+        @objs << GameObjects::Asteroid.new(position: position, velocity: velocity)
       end
 
       def draw
@@ -48,6 +49,15 @@ module PlanetaryDefense
 
         @stars.each { |o| o.update(PlanetaryDefense::FIXED_UPDATE_INTERVAL) }
         @objs.each { |o| o.update(PlanetaryDefense::FIXED_UPDATE_INTERVAL) }
+      end
+
+      def choose_asteroid_position_and_velocity
+        position = CyberarmEngine::Vector.new(Gosu.offset_x(rand(359), DESIGN_RESOLUTION_HEIGHT), Gosu.offset_y(rand(359), DESIGN_RESOLUTION_HEIGHT))
+
+        [
+          position,
+          (@planet.position - position).normalized
+        ]
       end
     end
   end
