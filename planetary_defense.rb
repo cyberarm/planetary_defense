@@ -15,6 +15,7 @@ end
 require_relative "lib/version"
 require_relative "lib/theme"
 require_relative "lib/window"
+require_relative "lib/fixed_random"
 require_relative "lib/states/main_menu"
 require_relative "lib/states/game"
 

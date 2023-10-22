@@ -30,8 +30,12 @@ module PlanetaryDefense
         @objs << @planet = GameObjects::Planet.new
         @objs << @moon = GameObjects::Moon.new
 
-        @last_asteroid_spawned_at = 0
         @asteroid_spawn_interval = 5_000
+        @last_asteroid_spawned_at = -@asteroid_spawn_interval
+
+        @angle_table_index = 0
+        @size_table_index = 0
+        @velocity_table_index = 0
       end
 
       def draw
@@ -60,7 +64,7 @@ module PlanetaryDefense
       end
 
       def choose_asteroid_position_and_velocity
-        angle = rand(359)
+        angle = angle_table
         position = CyberarmEngine::Vector.new(
           @planet.position.x + Gosu.offset_x(angle, DESIGN_RESOLUTION_HEIGHT + LARGE_ASTEROID_SIZE),
           @planet.position.y + Gosu.offset_y(angle, DESIGN_RESOLUTION_HEIGHT + LARGE_ASTEROID_SIZE)
@@ -68,13 +72,40 @@ module PlanetaryDefense
 
         [
           position,
-          (@planet.position - position).normalized * rand(1.0..2.0)
+          (@planet.position - position).normalized * velocity_table
         ]
       end
 
       def spawn_asteroid
         position, velocity = choose_asteroid_position_and_velocity
-        @objs << GameObjects::Asteroid.new(position: position, velocity: velocity)
+        @objs << GameObjects::Asteroid.new(size: size_table, position: position, velocity: velocity)
+      end
+
+      def angle_table
+        a = Random::ANGLE_TABLE[@angle_table_index]
+
+        @angle_table_index += 1
+        @angle_table_index %= Random::ANGLE_TABLE.size
+
+        return a
+      end
+
+      def size_table
+        s = Random::SIZE_TABLE[@size_table_index]
+
+        @size_table_index += 1
+        @size_table_index %= Random::SIZE_TABLE.size
+
+        return s
+      end
+
+      def velocity_table
+        v = Random::VELOCITY_TABLE[@velocity_table_index]
+
+        @velocity_table_index += 1
+        @velocity_table_index %= Random::VELOCITY_TABLE.size
+
+        return v
       end
     end
   end

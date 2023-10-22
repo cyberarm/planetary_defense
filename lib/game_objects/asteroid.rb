@@ -2,7 +2,7 @@ module PlanetaryDefense
   module GameObjects
     class Asteroid < GameObject
       def setup
-        @image = get_image("#{ROOT_PATH}/assets/asteroid_#{%w(large medium small).sample}.png")
+        @image = get_image("#{ROOT_PATH}/assets/asteroid_#{@options[:size]}.png")
 
         @rotation_speed = rand(-60..60)
       end
