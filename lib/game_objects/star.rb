@@ -9,17 +9,17 @@ module PlanetaryDefense
         @time_elapsed = @options[:time_elapsed]
         @tween = @options[:tween]
 
-        @store_color = Gosu::Color.new(@color.red, @color.green, @color.blue, @color.alpha)
-        @white_color = Gosu::Color::WHITE
+        @store_color = Gosu::Color.rgba(@color.red, @color.green, @color.blue, 255)
+        @white_color = Gosu::Color.rgba(@color.red, @color.green, @color.blue, rand(50..100))
 
-        @radius = rand(2.0..4.0)
-        @triangles = 9
+        @radius = rand(0.25..1.0)
+        @points = 5
 
         @animator = CyberarmEngine::Animator.new(start_time: @last_updated_at, duration: @duration, from: @store_color, to: @white_color, tween: @tween)
       end
 
       def draw
-        Gosu.draw_circle(@position.x, @position.y, @radius, @triangles, @color, ZOrder::STAR, :add)
+        Gosu.draw_circle(@position.x, @position.y, @radius, @points, @color, ZOrder::STAR, :add)
       end
 
       def update(dt)

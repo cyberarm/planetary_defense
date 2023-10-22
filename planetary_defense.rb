@@ -8,6 +8,7 @@ module PlanetaryDefense
   ROOT_PATH = File.expand_path(".", __dir__)
   DESIGN_RESOLUTION_WIDTH = 1280 # px
   DESIGN_RESOLUTION_HEIGHT = 720 # px
+  LARGE_ASTEROID_SIZE = 75 # px
   FIXED_UPDATE_INTERVAL = 0.016 # 60 updates/second
 end
 

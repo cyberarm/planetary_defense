@@ -3,8 +3,8 @@ module PlanetaryDefense
     class Moon < GameObject
       def setup
         @image = get_image("#{ROOT_PATH}/assets/moon.png")
-        @position.x = window.width / 2
-        @position.y = window.height / 2
+        @position.x = DESIGN_RESOLUTION_WIDTH / 2
+        @position.y = DESIGN_RESOLUTION_HEIGHT / 2
 
         @origin = CyberarmEngine::Vector.new(@position.x, @position.y)
         @orbital_distance = 250

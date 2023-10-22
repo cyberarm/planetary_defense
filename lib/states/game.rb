@@ -8,14 +8,16 @@ module PlanetaryDefense
         end
 
         @stars = []
-        128.times do
+        1024.times do
           @stars << GameObjects::Star.new(
-            position: CyberarmEngine::Vector.new(rand(0..PlanetaryDefense::DESIGN_RESOLUTION_WIDTH), rand(0..PlanetaryDefense::DESIGN_RESOLUTION_WIDTH)),
+            position: CyberarmEngine::Vector.new(
+              rand(0..PlanetaryDefense::DESIGN_RESOLUTION_WIDTH),
+              rand(0..PlanetaryDefense::DESIGN_RESOLUTION_HEIGHT)
+            ),
             color: [
-              Gosu::Color::RED,
-              Gosu::Color::YELLOW,
-              Gosu::Color::BLUE,
-              Gosu::Color::GREEN,
+              Gosu::Color.rgba(200, 200, 0, 255),
+              Gosu::Color.rgba(150, 150, 0, 255),
+              Gosu::Color.rgba(100, 100, 0, 255),
             ].sample,
             last_updated_at: Gosu.milliseconds,
             duration: rand(1_500..5_000),
@@ -28,8 +30,8 @@ module PlanetaryDefense
         @objs << @planet = GameObjects::Planet.new
         @objs << @moon = GameObjects::Moon.new
 
-        position, velocity = choose_asteroid_position_and_velocity
-        @objs << GameObjects::Asteroid.new(position: position, velocity: velocity)
+        @last_asteroid_spawned_at = 0
+        @asteroid_spawn_interval = 5_000
       end
 
       def draw
@@ -49,15 +51,30 @@ module PlanetaryDefense
 
         @stars.each { |o| o.update(PlanetaryDefense::FIXED_UPDATE_INTERVAL) }
         @objs.each { |o| o.update(PlanetaryDefense::FIXED_UPDATE_INTERVAL) }
+
+        if Gosu.milliseconds - @last_asteroid_spawned_at >= @asteroid_spawn_interval
+          @last_asteroid_spawned_at = Gosu.milliseconds
+
+          spawn_asteroid
+        end
       end
 
       def choose_asteroid_position_and_velocity
-        position = CyberarmEngine::Vector.new(Gosu.offset_x(rand(359), DESIGN_RESOLUTION_HEIGHT), Gosu.offset_y(rand(359), DESIGN_RESOLUTION_HEIGHT))
+        angle = rand(359)
+        position = CyberarmEngine::Vector.new(
+          @planet.position.x + Gosu.offset_x(angle, DESIGN_RESOLUTION_HEIGHT + LARGE_ASTEROID_SIZE),
+          @planet.position.y + Gosu.offset_y(angle, DESIGN_RESOLUTION_HEIGHT + LARGE_ASTEROID_SIZE)
+        )
 
         [
           position,
-          (@planet.position - position).normalized
+          (@planet.position - position).normalized * rand(1.0..2.0)
         ]
+      end
+
+      def spawn_asteroid
+        position, velocity = choose_asteroid_position_and_velocity
+        @objs << GameObjects::Asteroid.new(position: position, velocity: velocity)
       end
     end
   end
