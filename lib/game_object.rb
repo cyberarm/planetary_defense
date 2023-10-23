@@ -4,6 +4,7 @@ module PlanetaryDefense
 
     module ZOrder
       STAR = 15_000
+      PLATFORM = 18_000
       PLANET = 20_000
       MOON = PLANET
       ASTEROID = 25_000
@@ -11,6 +12,7 @@ module PlanetaryDefense
     end
 
     attr_accessor :position, :velocity, :angle
+    attr_reader :image, :scale
 
     def initialize(options = {})
       @options = options

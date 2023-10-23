@@ -24,6 +24,6 @@ require_relative "lib/game_objects/star"
 require_relative "lib/game_objects/planet"
 require_relative "lib/game_objects/moon"
 require_relative "lib/game_objects/asteroid"
-# require_relative "lib/game_objects/drone"
+require_relative "lib/game_objects/drone"
 
 PlanetaryDefense::Window.new(width: 1280, height: 720, resizable: true).show

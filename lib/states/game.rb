@@ -36,6 +36,13 @@ module PlanetaryDefense
         @angle_table_index = 0
         @size_table_index = 0
         @velocity_table_index = 0
+
+
+        @drone_interval = 3_000
+        @last_drone_spawned_at = -@drone_interval
+
+        @objs << @drone = GameObjects::Drone.new(planet: @planet)
+        @launched_drone = nil
       end
 
       def draw
@@ -56,10 +63,49 @@ module PlanetaryDefense
         @stars.each { |o| o.update(PlanetaryDefense::FIXED_UPDATE_INTERVAL) }
         @objs.each { |o| o.update(PlanetaryDefense::FIXED_UPDATE_INTERVAL) }
 
+        @objs.select { |o| o.is_a?(GameObjects::Asteroid) }.each do |asteroid|
+          planet_dist = Gosu.distance(asteroid.position.x, asteroid.position.y, @planet.position.x, @planet.position.y)
+
+          if planet_dist <= asteroid.image.width / 2 * asteroid.scale + @planet.image.width / 2 * @planet.scale
+            pop_state
+
+            @objs.delete(asteroid)
+
+            break
+          end
+
+          moon_dist = Gosu.distance(asteroid.position.x, asteroid.position.y, @moon.position.x, @moon.position.y)
+
+          if moon_dist <= asteroid.image.width / 2 * asteroid.scale + @moon.image.width / 2 * @moon.scale
+            @objs.delete(asteroid)
+
+            break
+          end
+
+          if @launched_drone
+            drone_dist = Gosu.distance(asteroid.position.x, asteroid.position.y, @launched_drone.position.x, @launched_drone.position.y)
+
+            if drone_dist <= asteroid.image.width / 2 * asteroid.scale + @launched_drone.image.width / 2 * @launched_drone.scale
+              @objs.delete(asteroid)
+              @objs.delete(@launched_drone)
+
+              @launched_drone = nil
+
+              break
+            end
+          end
+        end
+
         if Gosu.milliseconds - @last_asteroid_spawned_at >= @asteroid_spawn_interval
           @last_asteroid_spawned_at = Gosu.milliseconds
 
           spawn_asteroid
+        end
+
+        if Gosu.milliseconds - @last_drone_spawned_at >= @drone_interval && !@drone
+          @last_drone_spawned_at = Gosu.milliseconds
+
+          @objs << @drone = GameObjects::Drone.new(planet: @planet)
         end
       end
 
@@ -106,6 +152,20 @@ module PlanetaryDefense
         @velocity_table_index %= Random::VELOCITY_TABLE.size
 
         return v
+      end
+
+      def button_down(id)
+        super
+
+        case id
+        when Gosu::MS_LEFT
+          if @drone
+            @drone.launch!
+            @launched_drone = @drone
+
+            @drone = nil
+          end
+        end
       end
     end
   end
